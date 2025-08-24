@@ -1,12 +1,21 @@
 import { Hono } from 'hono'
-import { renderer } from './renderer'
+import { cors } from 'hono/cors'
+import { serveStatic } from 'hono/cloudflare-workers'
+import { seoMiddleware } from './middleware/seo'
+import { pageRoutes } from './routes/pages'
+import { apiRoutes } from './routes/api'
 
 const app = new Hono()
 
-app.use(renderer)
+// Middleware
+app.use('/api/*', cors())
+app.use('*', seoMiddleware)
 
-app.get('/', (c) => {
-  return c.render(<h1>Hello!</h1>)
-})
+// Serve static files
+app.use('/static/*', serveStatic({ root: './public' }))
+
+// Routes
+app.route('/api', apiRoutes)
+app.route('/', pageRoutes)
 
 export default app
