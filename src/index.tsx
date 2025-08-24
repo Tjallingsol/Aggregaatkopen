@@ -2,20 +2,24 @@ import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { serveStatic } from 'hono/cloudflare-workers'
 import { seoMiddleware } from './middleware/seo'
-import { pageRoutes } from './routes/pages'
-import { apiRoutes } from './routes/api'
+import { pagesRouter } from './routes/pages'
+import { apiRouter } from './routes/api'
 
 const app = new Hono()
 
-// Middleware
+// CORS middleware voor API routes
 app.use('/api/*', cors())
+
+// SEO middleware voor alle routes
 app.use('*', seoMiddleware)
 
-// Serve static files
+// Statische bestanden serveren
 app.use('/static/*', serveStatic({ root: './public' }))
+app.use('/assets/*', serveStatic({ root: './public' }))
+app.use('/images/*', serveStatic({ root: './public' }))
 
 // Routes
-app.route('/api', apiRoutes)
-app.route('/', pageRoutes)
+app.route('/api', apiRouter)
+app.route('/', pagesRouter)
 
 export default app

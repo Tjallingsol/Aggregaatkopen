@@ -1,109 +1,129 @@
 import { Context, Next } from 'hono'
 
-export interface SEOData {
+interface SEOData {
   title: string
   description: string
-  keywords: string
-  canonical?: string
-  ogTitle?: string
-  ogDescription?: string
+  keywords: string[]
   ogImage?: string
+  canonicalUrl?: string
   structuredData?: any
 }
 
-export const seoMiddleware = async (c: Context, next: Next) => {
-  // Add common SEO headers
-  c.header('X-Content-Type-Options', 'nosniff')
-  c.header('X-Frame-Options', 'DENY')
-  c.header('X-XSS-Protection', '1; mode=block')
+const defaultSEO: SEOData = {
+  title: 'Aggregaat Kopen - Beste Aggregaten & Stroommachines | Aggregaatkopen.com',
+  description: 'Ontdek de beste aggregaten voor thuis en professioneel gebruik. Vergelijk stille aggregaten, diesel aggregaten en meer. Expert koopgidsen en reviews.',
+  keywords: [
+    'aggregaat kopen',
+    'aggregaat kopen voor thuis', 
+    'stille aggregaat kopen',
+    'stroom aggregaat kopen',
+    'stil aggregaat kopen',
+    'diesel aggregaat kopen',
+    'aggregaat kopen diesel',
+    'aggregaat diesel kopen',
+    'professionele aggregaat kopen',
+    'aggregaat kopen gamma',
+    'stroommachine',
+    'generator kopen',
+    'noodstroom'
+  ]
+}
+
+// SEO data per pagina
+export const seoPages: Record<string, SEOData> = {
+  '/': {
+    ...defaultSEO,
+    structuredData: {
+      "@context": "https://schema.org",
+      "@type": "Website",
+      "name": "Aggregaatkopen.com",
+      "description": "De beste plek om aggregaten te vergelijken en kopen",
+      "url": "https://aggregaatkopen.com"
+    }
+  },
+  '/aggregaat-kopen-voor-thuis': {
+    title: 'Aggregaat Kopen voor Thuis - Complete Gids 2024 | Aggregaatkopen.com',
+    description: 'Alles over aggregaat kopen voor thuis. Vergelijk stille aggregaten, capaciteit en prijzen. Expert advies voor het juiste thuisaggregaat.',
+    keywords: ['aggregaat kopen voor thuis', 'thuisaggregaat', 'stille aggregaat thuis', 'noodstroom thuis'],
+    structuredData: {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "Aggregaat Kopen voor Thuis - Complete Gids",
+      "description": "Uitgebreide gids voor het kiezen van het juiste aggregaat voor thuisgebruik"
+    }
+  },
+  '/stille-aggregaat-kopen': {
+    title: 'Stille Aggregaat Kopen - Top 10 Stil Draaiende Aggregaten 2024',
+    description: 'Beste stille aggregaten vergelijken. Laag geluidsniveau, hoge kwaliteit. Expert reviews van stil aggregaat kopen voor woonwijken.',
+    keywords: ['stille aggregaat kopen', 'stil aggregaat kopen', 'geluidsarme aggregaat', 'stille generator'],
+    structuredData: {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "@id": "stille-aggregaten",
+      "category": "Stille Aggregaten"
+    }
+  },
+  '/diesel-aggregaat-kopen': {
+    title: 'Diesel Aggregaat Kopen - Professionele Diesel Generatoren | Vergelijk',
+    description: 'Diesel aggregaten vergelijken en kopen. Betrouwbare diesel generatoren voor professioneel gebruik. Prijzen, specificaties en expert reviews.',
+    keywords: ['diesel aggregaat kopen', 'aggregaat diesel kopen', 'professionele diesel aggregaat'],
+    structuredData: {
+      "@context": "https://schema.org",
+      "@type": "Product", 
+      "@id": "diesel-aggregaten",
+      "category": "Diesel Aggregaten"
+    }
+  },
+  '/professionele-aggregaat-kopen': {
+    title: 'Professionele Aggregaat Kopen - Zwaar Industrieel Gebruik | Expert Gids',
+    description: 'Professionele aggregaten voor industrieel gebruik. Vergelijk capaciteit, betrouwbaarheid en prijzen. Expert advies voor zakelijk gebruik.',
+    keywords: ['professionele aggregaat kopen', 'industrieel aggregaat', 'zakelijke generator'],
+    structuredData: {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "serviceType": "Professionele Aggregaten"
+    }
+  }
+}
+
+export async function seoMiddleware(c: Context, next: Next) {
+  // SEO data ophalen voor huidige route
+  const path = c.req.path
+  const seoData = seoPages[path] || defaultSEO
+  
+  // SEO data beschikbaar maken in context
+  c.set('seo', seoData)
   
   await next()
 }
 
-export const renderPage = (c: Context, content: string, seoData: SEOData) => {
-  const { 
-    title, 
-    description, 
-    keywords, 
-    canonical,
-    ogTitle = title,
-    ogDescription = description,
-    ogImage = '/static/images/aggregaat-kopen-logo.jpg',
-    structuredData 
-  } = seoData
-
-  const currentUrl = new URL(c.req.url).pathname
-  const baseUrl = 'https://aggregaatkopen.com'
-  const canonicalUrl = canonical || `${baseUrl}${currentUrl}`
-
-  return c.html(`<!DOCTYPE html>
-<html lang="nl" itemscope itemtype="https://schema.org/WebSite">
-<head>
-    <meta charset="UTF-8">
+export function generateMetaTags(seoData: SEOData): string {
+  const canonicalUrl = seoData.canonicalUrl || `https://aggregaatkopen.com${seoData.canonicalUrl || ''}`
+  
+  return `
+    <title>${seoData.title}</title>
+    <meta name="description" content="${seoData.description}">
+    <meta name="keywords" content="${seoData.keywords.join(', ')}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
     
-    <!-- Primary Meta Tags -->
-    <title>${title}</title>
-    <meta name="title" content="${title}">
-    <meta name="description" content="${description}">
-    <meta name="keywords" content="${keywords}">
-    <meta name="robots" content="index, follow">
-    <meta name="language" content="Dutch">
-    <meta name="author" content="Aggregaat Kopen">
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="${seoData.title}">
+    <meta property="og:description" content="${seoData.description}">
+    <meta property="og:image" content="${seoData.ogImage || 'https://aggregaatkopen.com/images/aggregaat-social.jpg'}">
+    <meta property="og:url" content="${canonicalUrl}">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="${seoData.title}">
+    <meta name="twitter:description" content="${seoData.description}">
+    <meta name="twitter:image" content="${seoData.ogImage || 'https://aggregaatkopen.com/images/aggregaat-social.jpg'}">
     
     <!-- Canonical URL -->
     <link rel="canonical" href="${canonicalUrl}">
     
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="${canonicalUrl}">
-    <meta property="og:title" content="${ogTitle}">
-    <meta property="og:description" content="${ogDescription}">
-    <meta property="og:image" content="${ogImage}">
-    <meta property="og:locale" content="nl_NL">
-    <meta property="og:site_name" content="Aggregaat Kopen">
-    
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="${canonicalUrl}">
-    <meta property="twitter:title" content="${ogTitle}">
-    <meta property="twitter:description" content="${ogDescription}">
-    <meta property="twitter:image" content="${ogImage}">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
-    <link rel="apple-touch-icon" sizes="180x180" href="/static/images/apple-touch-icon.png">
-    
-    <!-- CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#1a365d',
-                        secondary: '#2d3748',
-                        accent: '#3182ce'
-                    }
-                }
-            }
-        }
-    </script>
-    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="/static/css/style.css" rel="stylesheet">
-    
-    ${structuredData ? `<script type="application/ld+json">${JSON.stringify(structuredData)}</script>` : ''}
-</head>
-<body class="bg-gray-50 text-gray-800">
-    ${content}
-    
-    <!-- Analytics placeholder -->
-    <script>
-        // Google Analytics or other tracking code can be added here
-        console.log('Page loaded: ${currentUrl}');
-    </script>
-    
-    <script src="/static/js/main.js"></script>
-</body>
-</html>`)
+    <!-- Structured Data -->
+    ${seoData.structuredData ? `<script type="application/ld+json">${JSON.stringify(seoData.structuredData)}</script>` : ''}
+  `
 }
