@@ -1,0 +1,27 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://aggregaatkopen.com/sitemap.xml
+
+# Allow access to static assets
+Allow: /static/
+Allow: /assets/
+Allow: /images/
+
+# Block sensitive areas (if any)
+Disallow: /api/
+Disallow: /admin/
+Disallow: /_worker.js
+Disallow: /_routes.json
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
+
+# Google-specific directives
+User-agent: Googlebot
+Crawl-delay: 1
+
+# Bing-specific directives  
+User-agent: Bingbot
+Crawl-delay: 1
