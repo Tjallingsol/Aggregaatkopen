@@ -1,0 +1,71 @@
+name: Deploy to Vimexx
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      deploy_message:
+        description: 'Deployment message'
+        required: false
+        default: 'Manual deployment'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 🚀 Checkout Repository
+      uses: actions/checkout@v4
+      
+    - name: 📦 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: 🔧 Install Dependencies
+      run: npm ci
+      
+    - name: 🏗️ Generate Static Website
+      run: |
+        echo "🏗️ Building static site for Vimexx..."
+        node generate-static.cjs
+        echo "✅ Static site generated in static-site/"
+        ls -la static-site/
+        
+    - name: 📤 Deploy to Vimexx via FTP
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./static-site/
+        server-dir: /public_html/
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          **/*.log
+          
+    - name: 🎉 Deployment Success
+      run: |
+        echo "🎉 Website successfully deployed to Vimexx!"
+        echo "📍 Check your website at: https://aggregaatkopen.com"
+        echo "⏰ Deployed at: $(date)"
+        
+    - name: 📝 Create Deployment Summary
+      run: |
+        echo "## 🚀 Deployment Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "✅ **Status**: Successful" >> $GITHUB_STEP_SUMMARY
+        echo "📅 **Date**: $(date)" >> $GITHUB_STEP_SUMMARY  
+        echo "🌐 **Website**: https://aggregaatkopen.com" >> $GITHUB_STEP_SUMMARY
+        echo "📂 **Files deployed**: Static HTML, CSS, JS, robots.txt, sitemap.xml" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📋 Deployed Files:" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ index.html (Homepage)" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ robots.txt (SEO)" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ sitemap.xml (SEO)" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ .htaccess (Performance & Security)" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ static/ directory (CSS, JS)" >> $GITHUB_STEP_SUMMARY
