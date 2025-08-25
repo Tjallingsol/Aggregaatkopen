@@ -4,11 +4,6 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
-    inputs:
-      deploy_message:
-        description: 'Deployment message'
-        required: false
-        default: 'Manual deployment'
 
 jobs:
   deploy:
@@ -21,17 +16,22 @@ jobs:
     - name: 📦 Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
-        cache: 'npm'
+        node-version: '20'
+        registry-url: 'https://registry.npmjs.org'
         
-    - name: 🔧 Install Dependencies
-      run: npm ci
+    - name: 🧹 Clean npm cache
+      run: npm cache clean --force
       
+    - name: 🔧 Install Dependencies (with fallback)
+      run: |
+        echo "Installing dependencies..."
+        npm install --no-package-lock --legacy-peer-deps || npm install --force
+        
     - name: 🏗️ Generate Static Website
       run: |
         echo "🏗️ Building static site for Vimexx..."
         node generate-static.cjs
-        echo "✅ Static site generated in static-site/"
+        echo "✅ Static site generated!"
         ls -la static-site/
         
     - name: 📤 Deploy to Vimexx via FTP
@@ -41,31 +41,16 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: ./static-site/
-        server-dir: /public_html/
+        server-dir: /
         exclude: |
           **/.git*
           **/.git*/**
           **/node_modules/**
           **/*.log
-          
+        log-level: verbose
+        
     - name: 🎉 Deployment Success
       run: |
         echo "🎉 Website successfully deployed to Vimexx!"
         echo "📍 Check your website at: https://aggregaatkopen.com"
         echo "⏰ Deployed at: $(date)"
-        
-    - name: 📝 Create Deployment Summary
-      run: |
-        echo "## 🚀 Deployment Summary" >> $GITHUB_STEP_SUMMARY
-        echo "" >> $GITHUB_STEP_SUMMARY
-        echo "✅ **Status**: Successful" >> $GITHUB_STEP_SUMMARY
-        echo "📅 **Date**: $(date)" >> $GITHUB_STEP_SUMMARY  
-        echo "🌐 **Website**: https://aggregaatkopen.com" >> $GITHUB_STEP_SUMMARY
-        echo "📂 **Files deployed**: Static HTML, CSS, JS, robots.txt, sitemap.xml" >> $GITHUB_STEP_SUMMARY
-        echo "" >> $GITHUB_STEP_SUMMARY
-        echo "### 📋 Deployed Files:" >> $GITHUB_STEP_SUMMARY
-        echo "- ✅ index.html (Homepage)" >> $GITHUB_STEP_SUMMARY
-        echo "- ✅ robots.txt (SEO)" >> $GITHUB_STEP_SUMMARY
-        echo "- ✅ sitemap.xml (SEO)" >> $GITHUB_STEP_SUMMARY
-        echo "- ✅ .htaccess (Performance & Security)" >> $GITHUB_STEP_SUMMARY
-        echo "- ✅ static/ directory (CSS, JS)" >> $GITHUB_STEP_SUMMARY
