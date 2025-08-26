@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ Bestanden - Direct Download</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 p-8">
+    <div class="max-w-4xl mx-auto">
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <h1 class="text-3xl font-bold text-gray-800 mb-6">
+                <i class="fas fa-download mr-3 text-orange-500"></i>
+                FAQ Bestanden Download
+            </h1>
+
+            <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+                <h3 class="font-semibold text-red-800">⚠️ Download Server Probleem</h3>
+                <p class="text-red-700">De automatische download server heeft problemen. Gebruik deze directe links:</p>
+            </div>
+
+            <!-- Manual Download Instructions -->
+            <div class="bg-blue-50 p-6 rounded-lg mb-6">
+                <h2 class="text-xl font-semibold mb-4 text-blue-800">
+                    <i class="fas fa-clipboard-list mr-2"></i>
+                    Handmatige Download Instructies
+                </h2>
+                
+                <p class="text-blue-700 mb-4">
+                    Kopieer en plak de onderstaande content in bestanden:
+                </p>
+
+                <div class="space-y-4">
+                    <div class="bg-white p-4 rounded border">
+                        <h3 class="font-semibold mb-2">1. Belangrijkste bestand: index.html</h3>
+                        <p class="text-sm text-gray-600 mb-2">Dit bevat de complete homepage met FAQ sectie</p>
+                        <button onclick="downloadIndexHTML()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                            <i class="fas fa-copy mr-2"></i>Kopieer index.html Content
+                        </button>
+                    </div>
+
+                    <div class="bg-white p-4 rounded border">
+                        <h3 class="font-semibold mb-2">2. Upload Instructies</h3>
+                        <p class="text-sm text-gray-600 mb-2">Stap-voor-stap upload gids</p>
+                        <button onclick="showInstructions()" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                            <i class="fas fa-info-circle mr-2"></i>Toon Upload Instructies
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Areas -->
+            <div id="content-area" class="hidden">
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-semibold">Bestand Content:</h3>
+                        <button onclick="copyToClipboard()" class="bg-orange-500 text-white px-3 py-1 rounded text-sm hover:bg-orange-600">
+                            <i class="fas fa-copy mr-1"></i>Kopieer Alles
+                        </button>
+                    </div>
+                    <textarea id="file-content" class="w-full h-96 p-4 text-sm font-mono border rounded" readonly></textarea>
+                </div>
+            </div>
+
+            <div id="instructions-area" class="hidden">
+                <div class="bg-yellow-50 p-6 rounded-lg border-l-4 border-yellow-500">
+                    <h3 class="font-semibold text-yellow-800 mb-4">Upload Stappen:</h3>
+                    <ol class="list-decimal list-inside space-y-2 text-yellow-700">
+                        <li><strong>Login</strong> op: <code>https://web0111.zxcs.nl:2222/CMD_FILE_MANAGER/</code></li>
+                        <li><strong>Navigeer</strong> naar: <code>domains/aggregaatkopen.com/public_html/</code></li>
+                        <li><strong>Maak nieuw bestand</strong> genaamd <code>index.html</code></li>
+                        <li><strong>Plak de content</strong> van hierboven in het bestand</li>
+                        <li><strong>Sla op</strong> en test: <code>https://aggregaatkopen.com</code></li>
+                        <li><strong>Scroll naar beneden</strong> om de FAQ sectie te zien!</li>
+                    </ol>
+                </div>
+            </div>
+
+            <!-- Quick Copy Buttons -->
+            <div class="mt-8 p-6 bg-orange-50 rounded-lg border-l-4 border-orange-500">
+                <h3 class="font-semibold text-orange-800 mb-4">🚀 Snelste Oplossing:</h3>
+                <p class="text-orange-700 mb-4">
+                    Klik op "Kopieer index.html Content", plak het in een nieuw index.html bestand in je Vimexx File Manager, en je FAQ sectie is live!
+                </p>
+                <div class="flex gap-4">
+                    <button onclick="downloadIndexHTML()" class="bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600">
+                        <i class="fas fa-copy mr-2"></i>Kopieer index.html
+                    </button>
+                    <button onclick="showInstructions()" class="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600">
+                        <i class="fas fa-question-circle mr-2"></i>Upload Help
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function downloadIndexHTML() {
+            const content = \`<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aggregaat Kopen - Beste Aggregaten & Stroommachines | Aggregaatkopen.com</title>
+    <meta name="description" content="Ontdek de beste aggregaten voor thuis en professioneel gebruik. Expert reviews, eerlijke vergelijkingen en persoonlijk advies.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                'aggregaat-blue': '#1e40af',
+                'aggregaat-green': '#059669',
+                'aggregaat-orange': '#ea580c'
+              }
+            }
+          }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <header class="bg-white shadow-lg sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-aggregaat-blue">
+                        <i class="fas fa-bolt mr-2"></i>
+                        <a href="/">Aggregaatkopen.com</a>
+                    </h1>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="/" class="text-gray-900 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                        <a href="/keuzehulp.html" class="bg-aggregaat-orange text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-orange-700">Keuzehulp</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-aggregaat-blue to-blue-700 text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6">
+                Aggregaat Kopen? 
+                <span class="text-yellow-300">Vergelijk de Beste!</span>
+            </h1>
+            <p class="text-xl md:text-2xl mb-8 text-blue-100">
+                Ontdek de beste aggregaten voor thuis, stille modellen, diesel aggregaten en professionele generators. 
+                Expert reviews en eerlijke vergelijkingen.
+            </p>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">
+                    <i class="fas fa-question-circle mr-3 text-orange-500"></i>
+                    Veelgestelde Vragen over Aggregaten
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Alle antwoorden op je vragen over aggregaten kopen, gebruiken en onderhouden
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Algemene Vragen -->
+                <div class="space-y-6">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">
+                        <i class="fas fa-question-circle text-orange-500 mr-2"></i>
+                        Algemene Vragen
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div class="faq-item bg-gray-50 rounded-lg p-6">
+                            <button class="faq-question w-full text-left" onclick="toggleFAQ(this)">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="text-lg font-semibold text-gray-800">Wat is een aggregaat?</h4>
+                                    <i class="fas fa-chevron-down text-gray-400 faq-icon"></i>
+                                </div>
+                            </button>
+                            <div class="faq-answer mt-4 hidden">
+                                <p class="text-gray-600 leading-relaxed">
+                                    Een aggregaat is een draagbare generator die elektriciteit opwekt door middel van een verbrandingsmotor. Het zet brandstof (benzine, diesel of gas) om in elektrische energie. Aggregaten worden gebruikt voor noodstroom, camping, bouwprojecten en situaties waar geen toegang is tot het elektriciteitsnet.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item bg-red-50 border-l-4 border-red-500 rounded-lg p-6">
+                            <button class="faq-question w-full text-left" onclick="toggleFAQ(this)">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="text-lg font-semibold text-red-800">⚠️ Mag ik een aggregaat binnenshuis gebruiken?</h4>
+                                    <i class="fas fa-chevron-down text-red-400 faq-icon"></i>
+                                </div>
+                            </button>
+                            <div class="faq-answer mt-4 hidden">
+                                <div class="bg-red-100 p-4 rounded-md mb-3">
+                                    <p class="text-red-800 font-bold">🚨 LEVENSGEVAAR - NOOIT BINNEN GEBRUIKEN!</p>
+                                </div>
+                                <p class="text-red-700 leading-relaxed">
+                                    Aggregaten produceren koolmonoxide (CO), een kleur- en geurloos gif dat binnen minuten dodelijk kan zijn. Gebruik altijd buiten, minimaal 3 meter van ramen/deuren!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Technische Vragen -->
+                <div class="space-y-6">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">
+                        <i class="fas fa-cog text-orange-500 mr-2"></i>
+                        Technisch & Advies
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div class="faq-item bg-gray-50 rounded-lg p-6">
+                            <button class="faq-question w-full text-left" onclick="toggleFAQ(this)">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="text-lg font-semibold text-gray-800">Hoeveel watt heb ik nodig?</h4>
+                                    <i class="fas fa-chevron-down text-gray-400 faq-icon"></i>
+                                </div>
+                            </button>
+                            <div class="faq-answer mt-4 hidden">
+                                <p class="text-gray-600 leading-relaxed">
+                                    Het benodigde vermogen hangt af van wat je wilt aansluiten. Vuistregel: LED-lamp (10W), laptop (65W), koelkast (150W), magnetron (800W), wasmachine (2000W). Voor een gemiddeld huishouden volstaat 3000-5000W, voor camping 1000-2000W.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="faq-item bg-gray-50 rounded-lg p-6">
+                            <button class="faq-question w-full text-left" onclick="toggleFAQ(this)">
+                                <div class="flex items-center justify-between">
+                                    <h4 class="text-lg font-semibold text-gray-800">Welk aggregaat moet ik kopen?</h4>
+                                    <i class="fas fa-chevron-down text-gray-400 faq-icon"></i>
+                                </div>
+                            </button>
+                            <div class="faq-answer mt-4 hidden">
+                                <p class="text-gray-600 leading-relaxed">
+                                    Voor camping: stille inverter (1000-2000W), voor thuis: 3000-5000W model, professioneel: diesel 5000W+. Bekende merken: Honda (betrouwbaar), Yamaha (goed), Hyundai (budget).
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white">
+        <div class="max-w-7xl mx-auto py-12 px-4">
+            <div class="text-center">
+                <h3 class="text-lg font-bold mb-4">
+                    <i class="fas fa-bolt mr-2"></i>
+                    Aggregaatkopen.com
+                </h3>
+                <p class="text-gray-300 text-sm mb-4">
+                    Dé expert gids voor aggregaat kopen in Nederland.
+                </p>
+                <p class="text-gray-400 text-sm">
+                    &copy; 2024 Aggregaatkopen.com - Alle rechten voorbehouden
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleFAQ(button) {
+            const answer = button.parentNode.nextElementSibling;
+            const icon = button.querySelector('.faq-icon');
+            
+            if (answer.classList.contains('hidden')) {
+                answer.classList.remove('hidden');
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            } else {
+                answer.classList.add('hidden');
+                icon.classList.remove('fa-chevron-up'); 
+                icon.classList.add('fa-chevron-down');
+            }
+        }
+    </script>
+</body>
+</html>\`;
+            
+            document.getElementById('file-content').value = content;
+            document.getElementById('content-area').classList.remove('hidden');
+            document.getElementById('instructions-area').classList.add('hidden');
+        }
+
+        function showInstructions() {
+            document.getElementById('instructions-area').classList.remove('hidden');
+            document.getElementById('content-area').classList.add('hidden');
+        }
+
+        function copyToClipboard() {
+            const textarea = document.getElementById('file-content');
+            textarea.select();
+            document.execCommand('copy');
+            
+            // Show feedback
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '<i class="fas fa-check mr-1"></i>Gekopieerd!';
+            button.classList.remove('bg-orange-500', 'hover:bg-orange-600');
+            button.classList.add('bg-green-500');
+            
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                button.classList.remove('bg-green-500');
+                button.classList.add('bg-orange-500', 'hover:bg-orange-600');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
